@@ -48,7 +48,8 @@ def generate_route(user_id, city_name, input_file, output_html):
     data.columns = ['user_id', 'timestamp', 'latitude', 'longitude', 'poi_id']
 
     # Filter the data for the specified user
-    user_data = data[data['user_id'] == user_id]
+    #user_data = data[data['user_id'] == user_id]
+    user_data = data.loc[data['user_id'] == user_id].copy()
 
     # If the user does not exist in the data, exit the function
     if user_data.empty:
@@ -56,7 +57,13 @@ def generate_route(user_id, city_name, input_file, output_html):
         return
 
     # Convert the timestamp column to datetime format, accounting for the "Z" suffix
-    user_data['timestamp'] = pd.to_datetime(user_data['timestamp'], format='%Y-%m-%dT%H:%M:%SZ')
+    #user_data.loc[:, 'timestamp'] = pd.to_datetime(user_data['timestamp'], format='%Y-%m-%dT%H:%M:%SZ')
+    # Convert the timestamp column to datetime format,
+    # accounting for the literal "Z" suffix
+    user_data['timestamp'] = pd.to_datetime(
+        user_data['timestamp'],
+        format='%Y-%m-%dT%H:%M:%SZ'
+    )
 
     # Sort the data by timestamp
     user_data = user_data.sort_values('timestamp')
