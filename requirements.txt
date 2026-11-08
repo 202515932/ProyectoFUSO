@@ -1,0 +1,14 @@
+# paquetes necesarios para hacer funcionar el proyecto
+flask 
+memory-profiler
+pandas
+scikit-learn
+matplotlib
+numpy
+seaborn
+pillow
+scipy
+folium
+argparse
+imgkit
+geopy

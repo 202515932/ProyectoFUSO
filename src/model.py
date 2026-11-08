@@ -15,6 +15,8 @@ import seaborn as sns
 from memory_profiler import memory_usage, profile
 import time
 import multiprocessing as mp
+# importamos multiply_matrices para poder realizar la operacion compare_execution()
+from multiply_matrices import execute_multiply_matrices
 
 matplotlib.use('agg')
 
@@ -257,7 +259,32 @@ def compare_execution() -> Tuple[float, float]:
     matrix_sizes = [310, 210, 400, 160]
     ##CODE FOR STUDENTS
 
+    # Sequential version
+    tsec_start = time.perf_counter()
+    execute_multiply_matrices(matrix_sizes)
+    tsec_finish = time.perf_counter()
+    sequential_time = tsec_finish - tsec_start
 
+    # Parallel version using two process
+    procesos = []
+
+    tarea1 = [400]
+    tarea2 = [310, 210, 160]
+
+    tpar_start = time.perf_counter()
+    prc1 = mp.Process(target=execute_multiply_matrices, args=(tarea1, ))
+    procesos.append(prc1)
+    prc2 = mp.Process(target=execute_multiply_matrices, args=(tarea2, ))
+    procesos.append(prc2)
+
+    for prc in procesos:
+        prc.start()
+
+    for prc in procesos:
+        prc.join()
+
+    tpar_finish = time.perf_counter()
+    parallel_time = tpar_finish - tpar_start
 
     # END CODE FOR STUDENTS
 
